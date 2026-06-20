@@ -1,6 +1,8 @@
 import { expedientesMock } from './Expedientes'
 import type {
   Expediente,
+  GetExpedientesParams,
+  GetExpedientesResponse
 } from '../types/expediente'
 
 //Funciones mock requeridas
@@ -18,16 +20,58 @@ const delay = (): Promise<void> => {
  * Retorna: { items: Expediente[], total: number }
 */
 export async function getExpedientes(
-  params: any = {},
-): Promise<any> {
+  params: GetExpedientesParams = {},
+): Promise<GetExpedientesResponse> {
   //Retardo artificial de entre 600 y 1000ms
   await delay()
+  //Desestructuración de objetos con valores por defecto
+  const {
+    texto = '',
+    estado = null,
+    responsableId = null,
+    fechaDesde = null,
+    fechaHasta = null,
+    page = 1,
+    pageSize = 10,
+  } = params
   
-  let resultado = expedientesMock
+  let resultado = expedientesMock.slice()
 
-  return resultado;
+   if (texto.trim()) {
+    const textoNormalizado = texto.trim().toLowerCase()
+    resultado = resultado.filter(
+      (exp) =>
+        exp.numero.toLowerCase().includes(textoNormalizado) ||
+        exp.titulo.toLowerCase().includes(textoNormalizado) ||
+        exp.responsableNombre.toLowerCase().includes(textoNormalizado),
+    )
+  }
+
+  if (estado) {
+    resultado = resultado.filter((exp) => exp.estado === estado)
+  }
+
+   if (responsableId != null) {
+    resultado = resultado.filter((exp) => exp.responsableId === responsableId)
+  }
+
+   if (fechaDesde) {
+    resultado = resultado.filter((exp) => exp.fechaGestion >= fechaDesde)
+  }
+
+  if (fechaHasta) {
+    resultado = resultado.filter((exp) => exp.fechaGestion <= fechaHasta)
+  }
+
+  const total = resultado.length
+
+  const start = (page - 1) * pageSize
+  const items = resultado.slice(start, start + pageSize).map((exp) => {
+        return { ...exp }
+   })
 
 
+ return { items, total }
 
 }
 

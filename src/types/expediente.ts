@@ -13,6 +13,25 @@ export interface Expediente {
   fechaGestion: string
 }
 
+/**
+ * Parámetros que acepta GET /expedientes (simulado).
+ * Todos los filtros son opcionales: su ausencia equivale a "sin filtrar por este campo".
+ */
+export interface GetExpedientesParams {
+  texto?: string
+  estado?: EstadoExpediente | null
+  responsableId?: number | null
+  fechaDesde?: string | null
+  fechaHasta?: string | null
+  page?: number
+  pageSize?: number
+}
+
+export interface GetExpedientesResponse {
+  items: Expediente[]
+  total: number
+}
+
 
 
 

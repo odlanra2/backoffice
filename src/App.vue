@@ -1,6 +1,6 @@
  <script setup lang="ts">
-   
+   import Expedientespage from './pages/Expedientespage.vue'
  </script>
 <template>
-      
- </template>
+       <Expedientespage /> 
+</template>
