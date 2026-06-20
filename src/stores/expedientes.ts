@@ -14,6 +14,8 @@ export const useExpedientesStore = defineStore('expedientes', () => {
   const page = ref(1)
   const pageSize = ref(10)
   const scrollGuardado = ref(0)
+
+  const totalPaginas = computed(() => Math.max(1, Math.ceil(total.value / pageSize.value)))
   
   const filtrosGuardados = ref<GetExpedientesParams | null>(null)
   const loadingListado = ref(false)
@@ -43,6 +45,13 @@ export const useExpedientesStore = defineStore('expedientes', () => {
 
   }
 
+  /** Cambia de página y vuelve a pedir el listado con esa página. */
+  function irAPagina(nuevaPagina: number, filtrosActuales: GetExpedientesParams = {}): void {
+    if (nuevaPagina < 1 || nuevaPagina > totalPaginas.value) return
+    page.value = nuevaPagina
+    void fetchListado(filtrosActuales)
+  }
+
 
    return {
     items,
@@ -51,7 +60,10 @@ export const useExpedientesStore = defineStore('expedientes', () => {
     pageSize,
     filtrosGuardados,
     scrollGuardado,
+    totalPaginas,
     fetchListado,
+    irAPagina,
+
    
   }
 

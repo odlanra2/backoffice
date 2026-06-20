@@ -39,7 +39,7 @@ export interface UseExpedientesFiltrosReturn {
 export function useExpedientesFiltros(
   valoresIniciales?: Partial<FiltrosExpedientes>,
 ): UseExpedientesFiltrosReturn {
-  
+    
     const estadoInicial: FiltrosExpedientes = { ...FILTROS_INICIALES, ...valoresIniciales }
 
     const textoInput = ref(estadoInicial.texto)
@@ -49,6 +49,7 @@ export function useExpedientesFiltros(
     let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
     watch(textoInput, (nuevoValor) => {
+    
     if (debounceTimer) clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => {
       filtros.texto = nuevoValor.trim()

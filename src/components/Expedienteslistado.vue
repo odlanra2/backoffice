@@ -2,9 +2,10 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount,nextTick } from 'vue'
 import { useExpedientesStore } from '../stores/expedientes'
 import { useExpedientesFiltros } from '../composables/useexpedientesFiltros'
+import type { EstadoExpediente } from '../types/expediente'
 
 const store = useExpedientesStore()
-
+//Desestructuración
 const {
   textoInput,
   filtros,
@@ -21,6 +22,7 @@ const {
 })
 let inicializando = true
 const contenedorTablaRef = ref<HTMLDivElement | null>(null)
+const ESTADOS: EstadoExpediente[] = ['pendiente', 'revision', 'aprobado', 'cerrado']
 onMounted(async () => {
   await store.fetchListado(params.value)
   await nextTick()
@@ -30,6 +32,20 @@ onMounted(async () => {
   inicializando = false
 })
 
+watch(params, (nuevosParams) => {
+  if (inicializando) return
+  store.page = 1
+  
+  void store.fetchListado(nuevosParams)
+})
+
+function cambiarPagina(nuevaPagina: number): void {
+  store.irAPagina(nuevaPagina, params.value)
+}
+
+
+const hayPaginaAnterior = computed(() => store.page > 1)
+const hayPaginaSiguiente = computed(() => store.page < store.totalPaginas)
 
 </script>
 
@@ -123,6 +139,15 @@ onMounted(async () => {
       <p v-if="store.loadingListado" class="estado-mensaje">Cargando expedientes…</p>
 
     </div>
+      <footer class="paginacion">
+      <button type="button" :disabled="!hayPaginaAnterior" @click="cambiarPagina(store.page - 1)">
+        ← Anterior
+      </button>
+      <span>Página {{ store.page }} de {{ store.totalPaginas }} ({{ store.total }} expedientes)</span>
+      <button type="button" :disabled="!hayPaginaSiguiente" @click="cambiarPagina(store.page + 1)">
+        Siguiente →
+      </button>
+    </footer>
 
   </section>
 </template>      
