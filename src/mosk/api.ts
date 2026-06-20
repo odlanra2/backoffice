@@ -2,7 +2,8 @@ import { expedientesMock } from './Expedientes'
 import type {
   Expediente,
   GetExpedientesParams,
-  GetExpedientesResponse
+  GetExpedientesResponse,
+  UpdateExpedientePayload
 } from '../types/expediente'
 
 //Funciones mock requeridas
@@ -13,6 +14,10 @@ const DELAY_MAX_MS = 1000
 const delay = (): Promise<void> => {
     const ms = Math.floor(Math.random() * (DELAY_MAX_MS - DELAY_MIN_MS + 1)) + DELAY_MIN_MS
     return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function clone(expediente: Expediente): Expediente {
+  return { ...expediente }
 }
 
 /**
@@ -99,7 +104,7 @@ export async function getExpedienteById(id: number): Promise<Expediente> {
         throw new Error(`El expediente con id ${id} no existe.`)
     }
     //Devolvemos una promesa tipo expediente
-    return encontrado;
+    return clone(encontrado)
 
 }
 
@@ -109,7 +114,7 @@ export async function getExpedienteById(id: number): Promise<Expediente> {
  */
 export async function updateExpediente(
   id: number,
-  data: Expediente,
+  data: UpdateExpedientePayload,
 ): Promise<Expediente> {
   await delay()
 
@@ -119,14 +124,8 @@ export async function updateExpediente(
     throw new Error(`No se puede actualizar: el expediente con id ${id} no existe.`)
   }
   //Se usa .map() para transformar el array y actualizar si no encuentra el id devuelve el mismo
-  const actualizado: any= expedientesMock.map((exp) => {
-    if (exp.id === id) {
-       //Creamos el nuevo objeto fusionando el original con los nuevos datos
-       return { ...exp, ...data }
-    }
-      //Si no es el ID que buscamos, devolvemos el expediente sin cambios
-      return exp
-   })
+  const actualizado: Expediente = { ...expedientesMock[index], ...data }
+  expedientesMock[index] = actualizado
 
-  return actualizado
+  return clone(actualizado)
 }

@@ -1,4 +1,4 @@
-import type { Expediente } from '../types/expediente'
+import type { Expediente,Responsable} from '../types/expediente'
 8
 export const expedientesMock: Expediente[] = [
   { id: 1, numero: 'EXP-2024-001', titulo: 'Revision contrato fiduciario Bogota', estado: 'pendiente', responsableId: 12, responsableNombre: 'Laura Gomez', fechaCreacion: '2024-01-15', fechaGestion: '2024-02-01' },
@@ -22,4 +22,13 @@ export const expedientesMock: Expediente[] = [
   { id: 19, numero: 'EXP-2024-019', titulo: 'Aprobacion cesion de derechos Riohacha', estado: 'aprobado', responsableId: 21, responsableNombre: 'Andres Torres', fechaCreacion: '2024-02-26', fechaGestion: '2024-03-15' },
   { id: 20, numero: 'EXP-2024-020', titulo: 'Cierre fideicomiso de inversion Yopal', estado: 'cerrado', responsableId: 24, responsableNombre: 'Diana Castro', fechaCreacion: '2024-02-28', fechaGestion: '2024-03-17' },
  
+]
+
+
+export const responsablesMock: Responsable[] = [
+  { id: 12, nombre: 'Laura Gomez' },
+  { id: 15, nombre: 'Carlos Ramirez' },
+  { id: 18, nombre: 'Maria Fernanda Lopez' },
+  { id: 21, nombre: 'Andres Torres' },
+  { id: 24, nombre: 'Diana Castro' },
 ]

@@ -32,6 +32,15 @@ export interface GetExpedientesResponse {
   total: number
 }
 
+export interface Responsable {
+  id: number
+  nombre: string
+}
+
+export type UpdateExpedientePayload = Partial<
+  Pick<Expediente, 'estado' | 'titulo' | 'responsableId' | 'responsableNombre' | 'fechaGestion'>
+>
+
 
 
 
